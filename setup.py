@@ -10,7 +10,7 @@ setup(
     author_email="info@albertoconnor.ca",
     url="https://github.com/AvocadoCoop/avocado-templated-mail",
     license="BSD License",
-    packages=["templated_email"],
+    packages=["templated_mail"],
     zip_safe=False,
     install_requires=["django>=1.7"],
     include_package_data=True,

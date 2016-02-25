@@ -70,6 +70,20 @@ context which is passed in can be integrated into the message.
 The plain text strategy is to first render the HTML body as a template
 and then strip out all the tags.
 
+## Views
+
+For previews to work and to easily send an email to a subset of users
+enable the included views:
+
+```
+# urls.py
+
+urlpatterns = [
+  # ...
+  url('^mail/', include('templated_mail.urls')),
+]
+```
+
 ## Other Settings
 
 ```
