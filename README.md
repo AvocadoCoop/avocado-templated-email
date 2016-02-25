@@ -55,7 +55,9 @@ send_templated_mail(
 This will throw an exception, `EmailTemplate.DoesNotExist`, if there
 isn't a template named 'Your Template Name' in your database.
 
-`send_templated_mail` support the same interface as `send_mail`.
+`send_templated_mail` supports the same interface as `EmailMessage`
+[Doc](https://docs.djangoproject.com/en/1.7/topics/email/#django.core.mail.EmailMessage)
+less the attachments part, PR welcome.
 
 ## The Templates
 
