@@ -1,9 +1,8 @@
+from django.apps import apps
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.mail import EmailMultiAlternatives
 from django.template import Template, Context
-
-from .models import EmailTemplate
 
 
 def plain_text_from_html(html):
@@ -24,6 +23,8 @@ def get_default_from_email(self):
 def send_templated_mail(template_name, to, context=None, subject=None, from_email=None, cc=None, bcc=None, connection=None, fail_silently=False):  # noqa
     if context is None:
         context = {}
+
+    EmailTemplate = apps.get_model(app_label='templated_email', model_name='EmailTemplate')
 
     email_template = EmailTemplate.object.get(template_name=template_name)
 
