@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 setup(
@@ -10,7 +10,7 @@ setup(
     author_email="info@albertoconnor.ca",
     url="https://github.com/AvocadoCoop/avocado-templated-mail",
     license="BSD License",
-    packages=["templated_mail"],
+    packages=find_packages(),
     zip_safe=False,
     include_package_data=True,
     classifiers=[
