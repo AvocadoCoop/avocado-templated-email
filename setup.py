@@ -12,7 +12,6 @@ setup(
     license="BSD License",
     packages=["templated_mail"],
     zip_safe=False,
-    install_requires=["django>=1.7"],
     include_package_data=True,
     classifiers=[
         "Programming Language :: Python",

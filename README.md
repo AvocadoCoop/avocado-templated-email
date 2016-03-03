@@ -18,7 +18,7 @@ Django 1.7 or higher, should work with Python 2.7 or 3.4 or higher.
 Install from github for now
 
 ```
-pip install git@github.com:AvocadoCoop/avocado-templated-mail.git
+pip install git+git://github.com/AvocadoCoop/avocado-templated-mail.git
 ```
 
 Add `templated_mail` to your `INSTALLED_APPS`
@@ -26,7 +26,7 @@ Add `templated_mail` to your `INSTALLED_APPS`
 ```
 INSTALLED_APPS = (
     ...
-    "templated_mail"
+    'templated_mail'
 )
 ```
 
