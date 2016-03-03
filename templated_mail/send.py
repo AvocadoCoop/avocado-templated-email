@@ -1,15 +1,31 @@
+import os
+
 from django.apps import apps
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.mail import EmailMultiAlternatives
 from django.template import Template, Context
+from django.utils.html import strip_tags
 
 
 def plain_text_from_html(html):
-    return 'I need to do this!'
+    last_blank = False
+    output = []
+    for line in strip_tags(html).splitlines():
+        line = line.strip()
+        if not line:
+            if not last_blank:
+                output.append(line)
+                last_blank = True
+            else:
+                continue
+        else:
+            output.append(line)
+            last_blank = False
+    return os.linesep.join(output)
 
 
-def get_default_from_email(self):
+def get_default_from_email():
         default_from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', None)
 
         if default_from_email is None:
@@ -24,9 +40,9 @@ def send_templated_mail(template_name, to, context=None, subject=None, from_emai
     if context is None:
         context = {}
 
-    EmailTemplate = apps.get_model(app_label='templated_email', model_name='EmailTemplate')
+    EmailTemplate = apps.get_model(app_label='templated_mail', model_name='EmailTemplate')
 
-    email_template = EmailTemplate.object.get(template_name=template_name)
+    email_template = EmailTemplate.objects.get(template_name=template_name)
 
     html_template = Template(email_template.html)
     html_body = html_template.render(Context(context))
@@ -36,7 +52,7 @@ def send_templated_mail(template_name, to, context=None, subject=None, from_emai
         plain_text = plain_text_from_html(html_body)
 
     if from_email is None:
-        from_email = email_template.from_email
+        from_email = email_template.default_from
 
     if from_email == '':
         from_email = get_default_from_email()
