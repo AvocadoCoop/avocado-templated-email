@@ -1,28 +1,10 @@
-import os
+from __future__ import absolute_import, unicode_literals
 
 from django.apps import apps
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.mail import EmailMultiAlternatives
 from django.template import Template, Context
-from django.utils.html import strip_tags
-
-
-def plain_text_from_html(html):
-    last_blank = False
-    output = []
-    for line in strip_tags(html).splitlines():
-        line = line.strip()
-        if not line:
-            if not last_blank:
-                output.append(line)
-                last_blank = True
-            else:
-                continue
-        else:
-            output.append(line)
-            last_blank = False
-    return os.linesep.join(output)
 
 
 def get_default_from_email():
@@ -47,9 +29,7 @@ def send_templated_mail(template_name, to, context=None, subject=None, from_emai
     html_template = Template(email_template.html)
     html_body = html_template.render(Context(context))
 
-    plain_text = email_template.plain_text
-    if plain_text == '':
-        plain_text = plain_text_from_html(html_body)
+    plain_text = email_template.get_plain_text()
 
     if from_email is None:
         from_email = email_template.default_from

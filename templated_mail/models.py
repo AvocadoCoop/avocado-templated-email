@@ -1,7 +1,27 @@
 from __future__ import absolute_import, unicode_literals
+import os
 
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
+from django.utils.html import strip_tags
+
+
+def plain_text_from_html(html):
+    last_blank = False
+    output = []
+    for line in strip_tags(html).splitlines():
+        line = line.strip()
+        if not line:
+            if not last_blank:
+                output.append(line)
+                last_blank = True
+            else:
+                continue
+        else:
+            output.append(line)
+            last_blank = False
+    return os.linesep.join(output)
 
 
 @python_2_unicode_compatible
@@ -17,6 +37,14 @@ class EmailTemplate(models.Model):
     html = models.TextField()
 
     plain_text = models.TextField(blank=True, help_text="Optional. If blank generated from html")
+
+    def get_plain_text(self):
+        if self.plain_text == '':
+            return plain_text_from_html(self.html)
+        return self.plain_text
+
+    def get_absolute_url(self):
+        return reverse('templated_preview', args=[str(self.id)])
 
     def __str__(self):
         return self.template_name

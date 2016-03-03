@@ -7,7 +7,7 @@ from .send import send_templated_mail
 class MailForm(forms.Form):
     template_name = forms.CharField()
     users = forms.ModelMultipleChoiceField(
-        queryset=get_user_model().all(),
+        queryset=get_user_model().objects.all(),
         widget=forms.CheckboxSelectMultiple
     )
 
