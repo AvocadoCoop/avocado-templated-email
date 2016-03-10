@@ -84,6 +84,23 @@ urlpatterns = [
 ]
 ```
 
+## Template
+
+The use the mail sending view `mail/send/` for e.g. you will need to provide a template in `templated_mail/send_mail.html`. Here is an example:
+
+```
+{% extends "base.html" %}
+
+{% block contents %}
+<form class="" role="form" method="post">
+    {% csrf_token %}
+    <h2>Send Templated Message</h2>
+    {{ form.as_p }}
+    <input type="submit" value="Send">
+</form>
+{% endblock contents %}
+```
+
 ## Other Settings
 
 ```
