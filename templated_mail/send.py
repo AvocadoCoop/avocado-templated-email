@@ -37,6 +37,9 @@ def send_templated_mail(template_name, to, context=None, subject=None, from_emai
     if from_email == '':
         from_email = get_default_from_email()
 
+    if not isinstance(to, list):
+        to = [to]
+
     if subject is None:
         subject = email_template.subject
 
@@ -45,6 +48,6 @@ def send_templated_mail(template_name, to, context=None, subject=None, from_emai
         if hasattr(settings, 'TEMPLATED_EMAIL_BCC'):
             bcc.append(settings.TEMPLATED_EMAIL_BCC)
 
-    msg = EmailMultiAlternatives(subject, plain_text, from_email, [to], bcc=bcc, connection=connection, cc=cc)
+    msg = EmailMultiAlternatives(subject, plain_text, from_email, to, bcc=bcc, connection=connection, cc=cc)
     msg.attach_alternative(html_body, "text/html")
     return msg.send(fail_silently=fail_silently)

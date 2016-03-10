@@ -14,7 +14,7 @@ def send_mail(request, template="templated_mail/send_mail.html"):
         if form.is_valid():
             form.save()
             messages.info(request, 'Messages sent successfully!')
-            return redirect('send_mandrill_message')
+            return redirect('templated_send_mail')
     else:
         form = MailForm()
 
