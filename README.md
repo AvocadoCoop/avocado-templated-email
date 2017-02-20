@@ -70,6 +70,23 @@ context which is passed in can be integrated into the message.
 The plain text strategy is to first render the HTML body as a template
 and then strip out all the tags.
 
+### Inclusion
+
+Using a special syntax you can inlucde templates into eachother. It is a
+raw string based inclusion, so you need to ensure the resulting text is
+valid HTML using the preview function.
+
+```
+%%Name of Template%%
+```
+
+To include a template, on a signal line, no extra whitespace, two `%`
+followed by the name of the template you wish to include followed by two
+more `%` should work.
+
+NOTE: There isn't much defense here, you can get into cycles and make
+invalid template names if you include `%` in them.
+
 ## Views
 
 For previews to work and to easily send an email to a subset of users

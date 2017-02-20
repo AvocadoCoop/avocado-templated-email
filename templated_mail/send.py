@@ -7,6 +7,18 @@ from django.core.mail import EmailMultiAlternatives
 from django.template import Template, Context
 
 
+def render(email_template, context):
+    html_template_string = email_template.html_prerendered()
+    html_template = Template(html_template_string)
+    html_body = html_template.render(Context(context))
+
+    text_template_string = email_template.get_plain_text()
+    text_template = Template(text_template_string)
+    plain_text = text_template.render(Context(context))
+
+    return html_body, plain_text
+
+
 def get_default_from_email():
         default_from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', None)
 
@@ -23,13 +35,8 @@ def send_templated_mail(template_name, to, context=None, subject=None, from_emai
         context = {}
 
     EmailTemplate = apps.get_model(app_label='templated_mail', model_name='EmailTemplate')
-
     email_template = EmailTemplate.objects.get(template_name=template_name)
-
-    html_template = Template(email_template.html)
-    html_body = html_template.render(Context(context))
-
-    plain_text = email_template.get_plain_text()
+    html_body, plain_text = render(email_template, context)
 
     if from_email is None:
         from_email = email_template.default_from

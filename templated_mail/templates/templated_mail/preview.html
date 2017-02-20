@@ -1,1 +1,1 @@
-{% if text %}{{ email_template.get_plain_text|linebreaksbr }}{% else %}{{ email_template.html|safe }}{% endif %}
+{% if text %}{{ email_template.get_plain_text|linebreaksbr }}{% else %}{{ email_template.html_prerendered|safe }}{% endif %}
