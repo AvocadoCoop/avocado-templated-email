@@ -12,8 +12,8 @@ def send_mail(request, template="templated_mail/send_mail.html"):
     if request.method == "POST":
         form = MailForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.info(request, 'Messages sent successfully!')
+            count = form.save()
+            messages.info(request, '{} messages sent successfully!'.format(count))
             return redirect('templated_send_mail')
     else:
         form = MailForm()

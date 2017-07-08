@@ -26,6 +26,7 @@ class MailForm(forms.Form):
         template_name = self.cleaned_data['template_name']
         users = self.cleaned_data['users']
 
+        count = 0
         for user in users:
             send_templated_mail(
                 template_name,
@@ -34,3 +35,6 @@ class MailForm(forms.Form):
                     user = user
                 ),
             )
+            count += 1
+
+        return count
