@@ -5,6 +5,21 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.mail import EmailMultiAlternatives
 from django.template import Template, Context
+from django.utils.module_loading import import_string
+
+
+def process_context(context):
+    processor_path = getattr(settings, 'TEMPLATED_EMAIL_CONTEXT_PROCESSOR', None)
+
+    if processor_path is None:
+        return context
+
+    processor = import_string(processor_path)
+    process_data = {}
+    if callable(processor):
+        process_data = processor()
+
+    return context.update(process_data)
 
 
 def render(email_template, context):
@@ -34,6 +49,8 @@ def send_templated_mail(template_name, to, context=None, subject=None, from_emai
     if context is None:
         context = {}
 
+    context = process_context(context)
+
     EmailTemplate = apps.get_model(app_label='templated_mail', model_name='EmailTemplate')
     email_template = EmailTemplate.objects.get(template_name=template_name)
     html_body, plain_text = render(email_template, context)
@@ -52,8 +69,9 @@ def send_templated_mail(template_name, to, context=None, subject=None, from_emai
 
     if bcc is None:
         bcc = []
-        if hasattr(settings, 'TEMPLATED_EMAIL_BCC'):
-            bcc.append(settings.TEMPLATED_EMAIL_BCC)
+
+    if hasattr(settings, 'TEMPLATED_EMAIL_BCC'):
+        bcc.append(settings.TEMPLATED_EMAIL_BCC)
 
     msg = EmailMultiAlternatives(subject, plain_text, from_email, to, bcc=bcc, connection=connection, cc=cc)
     msg.attach_alternative(html_body, "text/html")

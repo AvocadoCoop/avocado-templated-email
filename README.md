@@ -124,6 +124,20 @@ The use the mail sending view `mail/send/` for e.g. you will need to provide a t
 TEMPLATED_EMAIL_BCC = 'report@example.com'
 ```
 
+Default is None
+
 With `TEMPLATED_EMAIL_BCC` set all message send with templated_email
 send function will bcc this address, this is handy for tracking you
 outbound email to make sure there are any quality issues over time.
+
+```
+TEMPLATED_EMAIL_CONTEXT_PROCESSOR = 'dotted.path.to.callable'
+```
+
+Default is None.
+
+Similar to template context processor, the callable returns a dictionary
+which is updated into the context for rendering the email template.
+
+Unlike template context processors, nothing is passed into the callable, since request isn't
+necessarily present when say a management command sends a templated email.
