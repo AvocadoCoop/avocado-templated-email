@@ -19,7 +19,9 @@ def process_context(context):
     if callable(processor):
         process_data = processor()
 
-    return context.update(process_data)
+    context.update(process_data)
+
+    return context
 
 
 def render(email_template, context):
